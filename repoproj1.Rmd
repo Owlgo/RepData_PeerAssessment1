@@ -1,0 +1,127 @@
+My First R Markdown File
+========================
+
+This is myfirst R markdown file
+
+Here we're going to load some data
+
+```{r}
+library(ggplot2)
+#
+data<-read.csv("activity.csv")
+dates<-unique(data$date)
+ok<-complete.cases(data$steps, data$date)
+data_ok<-data[ok,]
+summary(data_ok)
+```
+THE TOTAL NUMBER OF STEPS EACH day 
+
+```{r}
+
+step <- 1:length(dates)
+for(i in 1:length(dates)){
+        step[i]<-sum(data_ok$steps[data_ok$date == dates[i]])
+}
+#        
+ggplot(NULL, aes(x=step))+
+        geom_histogram()
+mean(step)
+median(step)
+```
+#
+```{r}
+intr<-unique(data_ok$interval)  # the 5 minute interval values used
+#
+# Calculate the means for each interval
+#
+intrvl_mean<-1:length(intr)
+for(i in 1:length(intr)){
+        intrvl_mean[i]<-mean(data_ok$steps[data_ok$interval == intr[i]])
+}
+#
+#
+plot(ggplot(NULL,aes(x=intr, y=intrvl_mean))+
+        geom_point())
+
+max_ave_steps<-intr[which(intrvl_mean==max(intrvl_mean))]  # interval with the maximum average number of steps
+```
+#
+```{r}
+num_missing_values<-sum(!ok)
+
+########################################## INPUT MISSING VALUES ###########################################
+###########################################################################################################
+## Fill in the missing step values with the mean values for that time interval and put in DF data_p_mssng #
+###########################################################################################################
+# Calculate the median for each interval
+#
+intrvl_median<-1:length(intr)
+for(i in 1:length(intr)){
+        intrvl_median[i]<-median(data_ok$steps[data_ok$interval == intr[i]])
+}
+#
+#
+ggplot(NULL,aes(x=intr, y=intrvl_median)) + geom_point()
+```
+
+```{r}
+empty_indx <- which(!ok)
+#
+data_p_mssng <- data
+#
+for(i in 1:length(empty_indx)){
+        value <- empty_indx[i] %% 288
+        if(value == 0) value <- 288
+        data_p_mssng$steps[empty_indx[i]] <- intrvl_mean[value]
+}     
+#
+#
+step_mssng <- 1:length(dates)
+for(i in 1:length(dates)){
+        step_mssng[i]<-sum(data_p_mssng$steps[data_p_mssng$date == dates[i]])
+}
+#        
+ggplot(NULL, aes(x=step_mssng))+
+        geom_histogram()
+mean(step_mssng)
+median(step_mssng)
+```
+ WEEKDAYS VS WEEKENDS 
+ 
+```{r}
+data_p_mssng$date<-as.Date(data_p_mssng$date)
+day<-weekdays(data_p_mssng$date)
+endday<-day == "Sunday" | day == "Saturday"
+day[endday] <- "weekend"
+day[!endday] <- "weekday"
+#
+data_p_mssng$day <- day
+data_p_mssng$day<-factor(data_p_mssng$day)
+#
+#png(file = "Plot6.png", bg = "transparent",width=480,height=480)
+#print(qplot(interval, steps, data=data_p_mssng, facets=.~fips, geom="line",stat="day"))
+#dev.off()
+#
+daywknd<-1:length(intr)
+intrvl_meanend<-1:length(intr)
+for(i in 1:length(intr)){
+        intrvl_meanend[i]<-mean(data_p_mssng$steps[data_p_mssng$interval == intr[i]&data_p_mssng$day=="weekend"])
+        daywknd[i] <-"weekend"
+}
+tend<-cbind(intr,intrvl_meanend, daywknd)
+#
+daywkdy<-1:length(intr)
+intrvl_meanday<-1:length(intr)
+for(i in 1:length(intr)){
+        intrvl_meanday[i]<-mean(data_p_mssng$steps[data_p_mssng$interval == intr[i]&data_p_mssng$day=="weekday"])
+        daywkdy[i]<-"weekday"
+}
+tday<-cbind(intr,intrvl_meanday, daywkdy)
+#
+dfmssng<-data.frame(rbind(tend,tday))
+names(dfmssng)<-c("interval","mean", "day")
+dfmssng$day<-factor(dfmssng$day)
+#
+plt<-ggplot(dfmssng, aes(x=interval, y=mean)) + geom_point()
+plt + facet_grid(day ~ .)
+```
