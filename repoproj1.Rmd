@@ -1,18 +1,35 @@
-My First R Markdown File
+Reproducible Research / Peer Assessment 1
 ========================
 
 This is myfirst R markdown file
 
 Here we're going to load some data
+Data
 
-```{r}
+The data for this assignment can be downloaded from the course web site:
+
+    Dataset: Activity monitoring data [52K]
+
+The variables included in this dataset are:
+
+    steps: Number of steps taking in a 5-minute interval (missing values are coded as NA)
+
+    date: The date on which the measurement was taken in YYYY-MM-DD format
+
+    interval: Identifier for the 5-minute interval in which measurement was taken
+
+The dataset is stored in a comma-separated-value (CSV) file and there are a total of 17,568 observations in this dataset.
+
+Read data file.
+
+```{r the first code chunk}
+echo=TRUE
 library(ggplot2)
 #
 data<-read.csv("activity.csv")
 dates<-unique(data$date)
 ok<-complete.cases(data$steps, data$date)
 data_ok<-data[ok,]
-summary(data_ok)
 ```
 THE TOTAL NUMBER OF STEPS EACH day 
 
@@ -22,10 +39,19 @@ step <- 1:length(dates)
 for(i in 1:length(dates)){
         step[i]<-sum(data_ok$steps[data_ok$date == dates[i]])
 }
-#        
+#    
+```
+a histogram of the total number of steps taken each day
+```{r}
 ggplot(NULL, aes(x=step))+
         geom_histogram()
+```
+mean  of the total number of steps taken per day
+```{r}
 mean(step)
+```
+ median of the total number of steps taken per day
+```{r}
 median(step)
 ```
 #
@@ -51,7 +77,7 @@ num_missing_values<-sum(!ok)
 
 ########################################## INPUT MISSING VALUES ###########################################
 ###########################################################################################################
-## Fill in the missing step values with the mean values for that time interval and put in DF data_p_mssng #
+## Fill in the missing step values with the median values for that time interval and put in DF data_p_mssng #
 ###########################################################################################################
 # Calculate the median for each interval
 #
@@ -98,30 +124,30 @@ day[!endday] <- "weekday"
 data_p_mssng$day <- day
 data_p_mssng$day<-factor(data_p_mssng$day)
 #
-#png(file = "Plot6.png", bg = "transparent",width=480,height=480)
-#print(qplot(interval, steps, data=data_p_mssng, facets=.~fips, geom="line",stat="day"))
-#dev.off()
-#
-daywknd<-1:length(intr)
-intrvl_meanend<-1:length(intr)
+daywk<-1:length(intr)
+intrvl_mean<-1:length(intr)
 for(i in 1:length(intr)){
-        intrvl_meanend[i]<-mean(data_p_mssng$steps[data_p_mssng$interval == intr[i]&data_p_mssng$day=="weekend"])
-        daywknd[i] <-"weekend"
+        intrvl_mean[i]<-mean(data_p_mssng$steps[data_p_mssng$interval == intr[i]&data_p_mssng$day=="weekend"])
+        daywk[i] <-"weekend"
 }
-tend<-cbind(intr,intrvl_meanend, daywknd)
+tend<-data.frame(intr)
+tend$intrvl_mean<-intrvl_mean
+tend$daywk<-daywk
 #
-daywkdy<-1:length(intr)
-intrvl_meanday<-1:length(intr)
 for(i in 1:length(intr)){
-        intrvl_meanday[i]<-mean(data_p_mssng$steps[data_p_mssng$interval == intr[i]&data_p_mssng$day=="weekday"])
-        daywkdy[i]<-"weekday"
+        intrvl_mean[i]<-mean(data_p_mssng$steps[data_p_mssng$interval == intr[i]&data_p_mssng$day=="weekday"])
+        daywk[i]<-"weekday"
 }
-tday<-cbind(intr,intrvl_meanday, daywkdy)
+tday<-data.frame(intr)
+tday$intrvl_mean<-intrvl_mean
+tday$daywk<-daywk
 #
-dfmssng<-data.frame(rbind(tend,tday))
-names(dfmssng)<-c("interval","mean", "day")
-dfmssng$day<-factor(dfmssng$day)
+##intr
 #
-plt<-ggplot(dfmssng, aes(x=interval, y=mean)) + geom_point()
-plt + facet_grid(day ~ .)
+dfmssng<-rbind(tend, tday)
+#
+dfmssng$daywk<-factor(dfmssng$daywk)
+#
+plt<-ggplot(dfmssng, aes(x=intr, y=intrvl_mean)) + geom_point()
+plt + facet_grid(daywk ~ .)
 ```
