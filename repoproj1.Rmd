@@ -6,7 +6,7 @@ This is myfirst R markdown file
 Here we're going to load some data
 Data
 
-The data for this assignment can be downloaded from the course web site:
+The data for this assignment was downloaded from the course web site:
 
     Dataset: Activity monitoring data [52K]
 
