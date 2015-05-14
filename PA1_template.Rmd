@@ -69,14 +69,17 @@ max_ave_steps<-intr[which(intrvl_mean==max(intrvl_mean))]
 max_ave_steps
 ```
 
-## Inputing missing values
+## Total number of missing values in the dataset
+
 ```{r}
 num_missing_values<-sum(!ok)
+num_missing_values
+```
 
-########################################## INPUT MISSING VALUES ###########################################
-###########################################################################################################
-## Fill in the missing step values with the median values for that time interval and put in DF data_p_mssng #
-###########################################################################################################
+## Inputing missing values with the median values for that time interval
+
+```{r}
+
 # Calculate the median for each interval
 #
 intrvl_median<-1:length(intr)
@@ -106,7 +109,13 @@ for(i in 1:length(dates)){
 }
 #        
 ggplot(NULL, aes(x=step_mssng))+
-        geom_histogram() 
+        geom_histogram() + xlab("Interval") + ylab("Count (missing data replaced with median)")
+
+```
+
+## The mean and median total number of steps taken per day
+
+```{r}
 mean(step_mssng)
 median(step_mssng)
 ```

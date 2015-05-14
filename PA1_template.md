@@ -97,15 +97,22 @@ max_ave_steps
 ## [1] 835
 ```
 
-## Inputing missing values
+## Total number of missing values in the dataset
+
 
 ```r
 num_missing_values<-sum(!ok)
+num_missing_values
+```
 
-########################################## INPUT MISSING VALUES ###########################################
-###########################################################################################################
-## Fill in the missing step values with the median values for that time interval and put in DF data_p_mssng #
-###########################################################################################################
+```
+## [1] 2304
+```
+
+## Inputing missing values with the median values for that time interval
+
+
+```r
 # Calculate the median for each interval
 #
 intrvl_median<-1:length(intr)
@@ -117,7 +124,7 @@ for(i in 1:length(intr)){
 ggplot(NULL,aes(x=intr, y=intrvl_median)) + geom_line() + xlab("Interval") + ylab("Interval Median")
 ```
 
-![](PA1_template_files/figure-html/unnamed-chunk-7-1.png) 
+![](PA1_template_files/figure-html/unnamed-chunk-8-1.png) 
 
 
 ```r
@@ -138,14 +145,17 @@ for(i in 1:length(dates)){
 }
 #        
 ggplot(NULL, aes(x=step_mssng))+
-        geom_histogram() 
+        geom_histogram() + xlab("Interval") + ylab("Count (missing data replaced with median)")
 ```
 
 ```
 ## stat_bin: binwidth defaulted to range/30. Use 'binwidth = x' to adjust this.
 ```
 
-![](PA1_template_files/figure-html/unnamed-chunk-8-1.png) 
+![](PA1_template_files/figure-html/unnamed-chunk-9-1.png) 
+
+## The mean and median total number of steps taken per day
+
 
 ```r
 mean(step_mssng)
@@ -204,4 +214,4 @@ plt<-ggplot(dfmssng, aes(x=intr, y=intrvl_mean)) + geom_line()
 plt + facet_grid(daywk ~ .) + xlab("Interval") + ylab("Interval Mean")
 ```
 
-![](PA1_template_files/figure-html/unnamed-chunk-9-1.png) 
+![](PA1_template_files/figure-html/unnamed-chunk-11-1.png) 
