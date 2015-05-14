@@ -35,7 +35,7 @@ a histogram of the total number of steps taken each day
 
 ```r
 ggplot(NULL, aes(x=step))+
-        geom_histogram()
+        geom_histogram() +xlab("Step Interval")
 ```
 
 ```
@@ -43,7 +43,9 @@ ggplot(NULL, aes(x=step))+
 ```
 
 ![](PA1_template_files/figure-html/unnamed-chunk-2-1.png) 
-mean  of the total number of steps taken per day
+
+# mean  of the total number of steps taken per day
+
 
 ```r
 mean(step)
@@ -52,7 +54,9 @@ mean(step)
 ```
 ## [1] 9354.23
 ```
- median of the total number of steps taken per day
+
+# median of the total number of steps taken per day
+
 
 ```r
 median(step)
@@ -76,17 +80,24 @@ for(i in 1:length(intr)){
 }
 #
 #
-plot(ggplot(NULL,aes(x=intr, y=intrvl_mean))+
-        geom_point())
+ggplot(NULL,aes(x=intr, y=intrvl_mean))+
+        geom_line() + xlab("Interval") + ylab("Interval Mean")
 ```
 
 ![](PA1_template_files/figure-html/unnamed-chunk-5-1.png) 
 
+## Interval with the maximum average number of steps
+
 ```r
-max_ave_steps<-intr[which(intrvl_mean==max(intrvl_mean))]  # interval with the maximum average number of steps
+max_ave_steps<-intr[which(intrvl_mean==max(intrvl_mean))]  
+max_ave_steps
 ```
 
-## Imputing missing values
+```
+## [1] 835
+```
+
+## Inputing missing values
 
 ```r
 num_missing_values<-sum(!ok)
@@ -103,10 +114,10 @@ for(i in 1:length(intr)){
 }
 #
 #
-ggplot(NULL,aes(x=intr, y=intrvl_median)) + geom_point()
+ggplot(NULL,aes(x=intr, y=intrvl_median)) + geom_line() + xlab("Interval") + ylab("Interval Median")
 ```
 
-![](PA1_template_files/figure-html/unnamed-chunk-6-1.png) 
+![](PA1_template_files/figure-html/unnamed-chunk-7-1.png) 
 
 
 ```r
@@ -127,14 +138,14 @@ for(i in 1:length(dates)){
 }
 #        
 ggplot(NULL, aes(x=step_mssng))+
-        geom_histogram()
+        geom_histogram() 
 ```
 
 ```
 ## stat_bin: binwidth defaulted to range/30. Use 'binwidth = x' to adjust this.
 ```
 
-![](PA1_template_files/figure-html/unnamed-chunk-7-1.png) 
+![](PA1_template_files/figure-html/unnamed-chunk-8-1.png) 
 
 ```r
 mean(step_mssng)
@@ -189,8 +200,8 @@ dfmssng<-rbind(tend, tday)
 #
 dfmssng$daywk<-factor(dfmssng$daywk)
 #
-plt<-ggplot(dfmssng, aes(x=intr, y=intrvl_mean)) + geom_point()
-plt + facet_grid(daywk ~ .)
+plt<-ggplot(dfmssng, aes(x=intr, y=intrvl_mean)) + geom_line()
+plt + facet_grid(daywk ~ .) + xlab("Interval") + ylab("Interval Mean")
 ```
 
-![](PA1_template_files/figure-html/unnamed-chunk-8-1.png) 
+![](PA1_template_files/figure-html/unnamed-chunk-9-1.png) 
