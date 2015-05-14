@@ -1,15 +1,18 @@
----
-title: "Reproducible Research: Peer Assessment 1"
-output: 
-  html_document:
-    keep_md: true
----
+# Reproducible Research: Peer Assessment 1
 
 
 ## Loading and preprocessing the data
-```{r the first code chunk}
+
+```r
 echo=TRUE
 library(ggplot2)
+```
+
+```
+## Warning: package 'ggplot2' was built under R version 3.0.3
+```
+
+```r
 #
 data<-read.csv("activity.csv")
 dates<-unique(data$date)
@@ -20,8 +23,8 @@ data_ok<-data[ok,]
 
 ## What is mean total number of steps taken per day?
 
-```{r}
 
+```r
 step <- 1:length(dates)
 for(i in 1:length(dates)){
         step[i]<-sum(data_ok$steps[data_ok$date == dates[i]])
@@ -29,22 +32,40 @@ for(i in 1:length(dates)){
 #    
 ```
 a histogram of the total number of steps taken each day
-```{r}
+
+```r
 ggplot(NULL, aes(x=step))+
         geom_histogram()
 ```
+
+```
+## stat_bin: binwidth defaulted to range/30. Use 'binwidth = x' to adjust this.
+```
+
+![](PA1_template_files/figure-html/unnamed-chunk-2-1.png) 
 mean  of the total number of steps taken per day
-```{r}
+
+```r
 mean(step)
 ```
+
+```
+## [1] 9354.23
+```
  median of the total number of steps taken per day
-```{r}
+
+```r
 median(step)
+```
+
+```
+## [1] 10395
 ```
 
 ## What is the average daily activity pattern?
 
-```{r}
+
+```r
 intr<-unique(data_ok$interval)  # the 5 minute interval values used
 #
 # Calculate the means for each interval
@@ -57,12 +78,17 @@ for(i in 1:length(intr)){
 #
 plot(ggplot(NULL,aes(x=intr, y=intrvl_mean))+
         geom_point())
+```
 
+![](PA1_template_files/figure-html/unnamed-chunk-5-1.png) 
+
+```r
 max_ave_steps<-intr[which(intrvl_mean==max(intrvl_mean))]  # interval with the maximum average number of steps
 ```
 
 ## Imputing missing values
-```{r}
+
+```r
 num_missing_values<-sum(!ok)
 
 ########################################## INPUT MISSING VALUES ###########################################
@@ -80,7 +106,10 @@ for(i in 1:length(intr)){
 ggplot(NULL,aes(x=intr, y=intrvl_median)) + geom_point()
 ```
 
-```{r}
+![](PA1_template_files/figure-html/unnamed-chunk-6-1.png) 
+
+
+```r
 empty_indx <- which(!ok)
 #
 data_p_mssng <- data
@@ -99,13 +128,34 @@ for(i in 1:length(dates)){
 #        
 ggplot(NULL, aes(x=step_mssng))+
         geom_histogram()
+```
+
+```
+## stat_bin: binwidth defaulted to range/30. Use 'binwidth = x' to adjust this.
+```
+
+![](PA1_template_files/figure-html/unnamed-chunk-7-1.png) 
+
+```r
 mean(step_mssng)
+```
+
+```
+## [1] 10766.19
+```
+
+```r
 median(step_mssng)
+```
+
+```
+## [1] 10766.19
 ```
 
 
 ## Are there differences in activity patterns between weekdays and weekends?
-```{r}
+
+```r
 data_p_mssng$date<-as.Date(data_p_mssng$date)
 day<-weekdays(data_p_mssng$date)
 endday<-day == "Sunday" | day == "Saturday"
@@ -142,3 +192,5 @@ dfmssng$daywk<-factor(dfmssng$daywk)
 plt<-ggplot(dfmssng, aes(x=intr, y=intrvl_mean)) + geom_point()
 plt + facet_grid(daywk ~ .)
 ```
+
+![](PA1_template_files/figure-html/unnamed-chunk-8-1.png) 
