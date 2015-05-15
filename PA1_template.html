@@ -61,7 +61,7 @@ if (window.hljs && document.readyState && document.readyState === "complete") {
 library(ggplot2)</code></pre>
 <pre><code>## Warning: package 'ggplot2' was built under R version 3.0.3</code></pre>
 <pre class="r"><code>#
-data&lt;-read.csv(&quot;activity.csv&quot;)
+data&lt;-read.csv(&quot;..\\activity.csv&quot;)
 dates&lt;-unique(data$date)
 ok&lt;-complete.cases(data$steps, data$date)
 data_ok&lt;-data[ok,]</code></pre>
@@ -155,6 +155,7 @@ ggplot(NULL, aes(x=step_mssng))+
 <pre><code>## [1] 10766.19</code></pre>
 <pre class="r"><code>median(step_mssng)</code></pre>
 <pre><code>## [1] 10766.19</code></pre>
+<p>There are significant differences - 13% - between the means of the original dataset (9354) and the data set filled in with medians (10766). Thee was no significant change - 3% - in he medians (original:10395; filled:10766).</p>
 </div>
 <div id="are-there-differences-in-activity-patterns-between-weekdays-and-weekends" class="section level2">
 <h2>Are there differences in activity patterns between weekdays and weekends?</h2>

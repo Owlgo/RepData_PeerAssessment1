@@ -14,7 +14,7 @@ library(ggplot2)
 
 ```r
 #
-data<-read.csv("activity.csv")
+data<-read.csv("..\\activity.csv")
 dates<-unique(data$date)
 ok<-complete.cases(data$steps, data$date)
 data_ok<-data[ok,]
@@ -172,7 +172,7 @@ median(step_mssng)
 ```
 ## [1] 10766.19
 ```
-
+There are significant differences - 13% - between the means of the original dataset (9354) and the data set filled in with medians (10766). Thee was no significant change - 3% - in he medians (original:10395; filled:10766).  
 
 ## Are there differences in activity patterns between weekdays and weekends?
 
