@@ -35,7 +35,7 @@ a histogram of the total number of steps taken each day
 
 ```r
 ggplot(NULL, aes(x=step))+
-        geom_histogram() +xlab("Step Interval")
+        geom_histogram() +xlab("Total Number of Steps per Day")
 ```
 
 ```
@@ -81,7 +81,7 @@ for(i in 1:length(intr)){
 #
 #
 ggplot(NULL,aes(x=intr, y=intrvl_mean))+
-        geom_line() + xlab("Interval") + ylab("Interval Mean")
+        geom_line() + xlab("Interval") + ylab("Mean Number of Steps per Interval")
 ```
 
 ![](PA1_template_files/figure-html/unnamed-chunk-5-1.png) 
